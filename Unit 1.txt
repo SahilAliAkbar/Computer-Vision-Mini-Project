@@ -1,0 +1,71 @@
+originalImage = imread('cameraman.tif');
+originalImage = im2double(originalImage);
+
+gaussianNoise = 0.1 * randn(size(originalImage));
+noisyImage = originalImage + gaussianNoise;
+
+% First figure: Original Image and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(originalImage); title('Original Image');
+subplot(2, 2, 2); imhist(originalImage); title('Histogram');
+
+% Second figure: Noisy Image and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(noisyImage); title('Noisy Image (Gaussian Noise)');
+subplot(2, 2, 2); imhist(noisyImage); title('Histogram');
+
+% Applying Filters
+filtered_wiener = wiener2(noisyImage, [5,5]);
+filtered_median = medfilt2(noisyImage);
+filtered_gaussian = imfilter(noisyImage, fspecial('gaussian', [5, 5], 1));
+filtered_mean = imfilter(noisyImage, fspecial('average'));
+filtered_bilateral = imbilatfilt(noisyImage);
+
+% Third figure: Wiener Filter and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(filtered_wiener); title('Wiener Filter');
+subplot(2, 2, 2); imhist(filtered_wiener); title('Histogram');
+
+% Fourth figure: Median Filter and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(filtered_median); title('Median Filter');
+subplot(2, 2, 2); imhist(filtered_median); title('Histogram');
+
+% Fifth figure: Gaussian Filter and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(filtered_gaussian); title('Gaussian Filter');
+subplot(2, 2, 2); imhist(filtered_gaussian); title('Histogram');
+
+% Sixth figure: Mean Filter and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(filtered_mean); title('Mean Filter');
+subplot(2, 2, 2); imhist(filtered_mean); title('Histogram');
+
+% Seventh figure: Bilateral Filter and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(filtered_bilateral); title('Bilateral Filter');
+subplot(2, 2, 2); imhist(filtered_bilateral); title('Histogram');
+
+% Applying Low-pass Filter
+lowPassFiltered = imfilter(noisyImage, fspecial('average'));
+
+% Eighth figure: Low-pass Filter and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(lowPassFiltered); title('Low-pass Filter');
+subplot(2, 2, 2); imhist(lowPassFiltered); title('Histogram');
+
+% Applying High-pass Filter
+highPassFilter = imsubtract(noisyImage, lowPassFiltered);
+
+% Ninth figure: High-pass Filter and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(highPassFilter); title('High-pass Filter');
+subplot(2, 2, 2); imhist(highPassFilter); title('Histogram');
+
+% Applying Laplacian Filter
+laplacianFiltered = imfilter(noisyImage, fspecial('laplacian'));
+
+% Tenth figure: Laplacian Filter and Histogram
+figure;
+subplot(2, 2, [1 3]); imshow(laplacianFiltered); title('Laplacian Filter');
+subplot(2, 2, 2); imhist(laplacianFiltered); title('Histogram');
